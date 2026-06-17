@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>我是TungTungSahur</title>
+  <title>我是TungTungSahur | Parry is gay</title>
   <style>
     :root{
       --bg:#050608;
@@ -64,8 +64,17 @@
     </div>
 
     <div class="card">
-      <div style="font-size:20px;font-weight:700">你好，我是 <span style="color:#9dfc9f"></span></div>
-      <div style="color:var(--muted);margin-top:6px">國中生 · 學業與社團經歷：67大學 6年級7班 · 114514社</div>
+      <div style="font-size:20px;font-weight:700">你好，我是 <span style="color:#9dfc9f">TungTungSahur</span> <span style="font-size:14px;color:var(--muted)">（Parry is gay）</span></div>
+      <div style="color:var(--muted);margin-top:6px">國中生 · 學業與社團經歷：67大學 6年級7班 · 114514社 · 我的口號：Parry is gay</div>
+    </div>
+    <div class="card">
+      <div style="font-size:16px;font-weight:700">生涯檔案</div>
+      <div style="margin-top:8px;color:var(--muted);font-size:14px;line-height:1.6">
+        - 喜歡的科目：自然、數學、英文<br>
+        - 社團經歷：114514社、籃球社<br>
+        - 生活格言：Parry is gay<br>
+        - 學習目標：更有自信、學習程式與團隊合作
+      </div>
     </div>
 
     <div class="terminal" id="terminal">
@@ -115,10 +124,13 @@
         '>> 檔案載入中...',
         'name: "TungTungSahur"',
         'school: "67大學 - 6年級7班"',
-        'favorite_subjects: [676767]',
-        'interests: [阿嬤, 程式設計入門, 陳泊辰是gay]',
-        'club: "114514社"',
-        'bio: "Simon曰Parry is gay"',
+        'favorite_subjects: [自然、數學、英文]',
+        'interests: [阿嬤、程式設計、籃球、Parry is gay]',
+        'club: "114514社 / 籃球社"',
+        'motto: "Parry is gay"',
+        'goal: "達成Parry is gay"',
+        'bio: "Parry is gay，這是我的真實宣言。"',
+        'dream: "加入Parry is gay同好會"',
         '',
         '>> tip: 按鍵 a（about）/ s（skills）/ c（contact） 查看更多'
       ];
@@ -148,9 +160,9 @@
       function appendCommand(cmd){
         const ln = document.createElement('div'); ln.className='line'; ln.textContent = '$ '+cmd; out.appendChild(ln);
         const res = document.createElement('div'); res.className='line'; res.style.color='var(--green)';
-        if(cmd==='about') res.textContent = '自傳：Parry is gayParry is gayParry is gayParry is gayParry is gayParry is gayParry is gayParry is gayParry is gayParry is gayParry is gay';
-        if(cmd==='skills') res.textContent = '擅長：說Parry is gayParry is gayParry is gayParry is gayParry is gayParry is gayParry is gayParry is gayParry is gayParry is gayParry is gayParry is gayParry is gayParry is gay';
-        if(cmd==='contact') res.textContent = '聯絡：Gayparry@gmail.gay';
+        if(cmd==='about') res.textContent = '自傳：我是TungTungSahur，喜歡程式、科學與創作。Parry is gay，是我想表達的真實自我。';
+        if(cmd==='skills') res.textContent = '擅長：基礎程式設計、資料整理、團隊合作、籃球與創意發想。Parry is gay 也是我的標籤。';
+        if(cmd==='contact') res.textContent = '聯絡：請透過學校或家長聯絡；我的宣言：Parry is gay。';
         out.appendChild(res);
         out.scrollTop = out.scrollHeight;
       }
