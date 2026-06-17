@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>我是TungTungSahur</title>
+  <style>
+    :root{
+      --bg:#050608;
+      --green:#39ff14;
+      --muted:#2b2f33;
+      --mono: "Courier New", Courier, monospace;
+    }
+    html,body{height:100%;}
+    body{
+      margin:0;padding:0;
+      background: radial-gradient(ellipse at center, rgba(57,255,20,0.02) 0%, rgba(5,6,8,1) 40%);
+      color:var(--green);
+      font-family:var(--mono);
+      display:flex;align-items:center;justify-content:center;
+      overflow:hidden;
+    }
+    .screen{
+      width:86vw;max-width:980px;height:76vh;max-height:720px;
+      background:linear-gradient(180deg, rgba(0,0,0,0.45), rgba(0,0,0,0.35));
+      border:1px solid rgba(57,255,20,0.08);
+      box-shadow: 0 0 80px rgba(57,255,20,0.02), inset 0 0 40px rgba(57,255,20,0.02);
+      padding:28px;box-sizing:border-box;position:relative;
+      display:flex;flex-direction:column;gap:12px;
+      backdrop-filter: blur(2px);
+    }
+    .logo{font-size:14px;color:var(--muted);}
+    .terminal{
+      background:transparent;flex:1;overflow:auto;padding:8px 12px;border-radius:4px;
+      border:1px dashed rgba(57,255,20,0.06);
+    }
+    .line{white-space:pre-wrap;word-break:break-word;font-size:15px;line-height:1.45}
+    .prompt{color:var(--green);}
+    .cursor{display:inline-block;width:10px;background:var(--green);margin-left:6px;animation:blink 1s step-end infinite}
+    @keyframes blink{50%{opacity:0}}
+
+    /* matrix rain */
+    canvas#matrix{position:absolute;inset:0;opacity:0.06;pointer-events:none}
+
+    /* header */
+    .hdr{display:flex;align-items:center;justify-content:space-between}
+    .hdr .title{font-weight:700;letter-spacing:1px}
+    .btns{display:flex;gap:8px}
+    .btn{width:12px;height:12px;border-radius:50%;background:#ff6159;box-shadow:0 0 6px rgba(255,97,89,0.12)}
+
+    /* card */
+    .card{background:linear-gradient(90deg, rgba(57,255,20,0.02), transparent);padding:12px;border-radius:6px;border:1px solid rgba(57,255,20,0.03)}
+
+    /* small responsive */
+    @media (max-width:560px){.screen{padding:16px;height:84vh}}
+  </style>
+</head>
+<body>
+  <canvas id="matrix"></canvas>
+  <div class="screen">
+    <div class="hdr">
+      <div class="title">system@host:~/<span style="color:var(--muted);">whoami</span></div>
+      <div class="btns"><div class="btn"></div><div class="btn" style="background:#ffbf39"></div><div class="btn" style="background:#34c84a"></div></div>
+    </div>
+
+    <div class="card">
+      <div style="font-size:20px;font-weight:700">你好，我是 <span style="color:#9dfc9f"></span></div>
+      <div style="color:var(--muted);margin-top:6px">國中生 · 學業與社團經歷：67大學 6年級7班 · 114514社</div>
+    </div>
+
+    <div class="terminal" id="terminal">
+      <div class="line prompt">$ echo "init session" <span class="cursor" id="cursor"></span></div>
+      <div id="output"></div>
+    </div>
+
+    <div style="display:flex;gap:10px;align-items:center;justify-content:space-between">
+      <div style="color:var(--muted);font-size:13px">快速指令: <span style="color:var(--green)">about</span> · <span style="color:var(--green)">skills</span> · <span style="color:var(--green)">contact</span></div>
+      <div style="color:var(--muted);font-size:13px">最後更新: 2026-06-17</div>
+    </div>
+  </div>
+
+  <script>
+    // Matrix background
+    (function(){
+      const canvas = document.getElementById('matrix');
+      const ctx = canvas.getContext('2d');
+      let w, h, cols, ypos;
+      function init(){
+        w = canvas.width = innerWidth;
+        h = canvas.height = innerHeight;
+        cols = Math.floor(w / 20) + 1;
+        ypos = Array(cols).fill(0).map(()=>Math.floor(Math.random()*h));
+      }
+      function draw(){
+        ctx.fillStyle = 'rgba(0,0,0,0.03)';
+        ctx.fillRect(0,0,w,h);
+        ctx.fillStyle = '#39ff14';
+        ctx.font = '14px monospace';
+        ypos.forEach((y, ind)=>{
+          const text = String.fromCharCode(33+Math.random()*94);
+          ctx.fillText(text, ind*20, y);
+          if(y > h && Math.random() > 0.975) ypos[ind] = 0; else ypos[ind] = y + 18;
+        });
+        requestAnimationFrame(draw);
+      }
+      addEventListener('resize', init);
+      init(); draw();
+    })();
+
+    // Terminal typing effect
+    (function(){
+      const out = document.getElementById('output');
+      const cursor = document.getElementById('cursor');
+      const lines = [
+        '>> 檔案載入中...',
+        'name: "TungTungSahur"',
+        'school: "67大學 - 6年級7班"',
+        'favorite_subjects: [676767]',
+        'interests: [阿嬤, 程式設計入門, 陳泊辰是gay]',
+        'club: "114514社"',
+        'bio: "喜歡動手做實驗與團隊活動，夢想成為工程師。"',
+        '',
+        '>> tip: 按鍵 a（about）/ s（skills）/ c（contact） 查看更多'
+      ];
+      let i=0, char=0;
+      function type(){
+        if(i>=lines.length) {cursor.style.display='none'; return}
+        const line = document.createElement('div'); line.className='line';
+        out.appendChild(line);
+        (function typer(){
+          if(char < lines[i].length){
+            line.textContent += lines[i][char++];
+            setTimeout(typer, 24 + Math.random()*40);
+          } else {
+            i++; char=0; setTimeout(type, 220);
+            out.scrollTop = out.scrollHeight;
+          }
+        })();
+      }
+      setTimeout(type, 600);
+
+      // simple input handler for quick commands
+      document.addEventListener('keydown', (e)=>{
+        if(e.key === 'a') {appendCommand('about');}
+        if(e.key === 's') {appendCommand('skills');}
+        if(e.key === 'c') {appendCommand('contact');}
+      });
+      function appendCommand(cmd){
+        const ln = document.createElement('div'); ln.className='line'; ln.textContent = '$ '+cmd; out.appendChild(ln);
+        const res = document.createElement('div'); res.className='line'; res.style.color='var(--green)';
+        if(cmd==='about') res.textContent = '自傳：Parry is gayParry is gayParry is gayParry is gayParry is gayParry is gayParry is gayParry is gayParry is gayParry is gayParry is gay';
+        if(cmd==='skills') res.textContent = '擅長：說Parry is gayParry is gayParry is gayParry is gayParry is gayParry is gayParry is gayParry is gayParry is gayParry is gayParry is gayParry is gayParry is gayParry is gay';
+        if(cmd==='contact') res.textContent = '聯絡：Gayparry@gmail.gay';
+        out.appendChild(res);
+        out.scrollTop = out.scrollHeight;
+      }
+    })();
+  </script>
+</body>
+</html>
